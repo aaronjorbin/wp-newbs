@@ -40,9 +40,10 @@ Promise.all( requests ).then( function( responses ){
 		props = r[1];
 	return new Promise( function (resolve, reject) {
 		console.log( 'Build Table' );
-		table = new AsciiTable( 'Contributors' ).setHeading('Version', 'Total', 'new')
+		table = new AsciiTable( 'Contributors' ).setHeading('Version', 'Total', 'New', 'Percent New' )
 		versions.forEach( v => {
-			table.addRow( v , props[v].length, newbs[v].length );
+			table.addRow( v , props[v].length, newbs[v].length, 
+				parseInt( 100 * ( newbs[v].length /  props[v].length ))  + '%' );
 		});
 		resolve( table );
 	});
