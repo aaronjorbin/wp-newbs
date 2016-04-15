@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ascii-table": "0.0.9",
+    "bluebird": "^3.3.5",
+    "request-promise": "^2.0.1",
     "underscore": "^1.8.3"
   }
 }
