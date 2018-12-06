@@ -1,9 +1,13 @@
 var	_ = require( 'underscore' ),
-	versions = [ '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '4.0', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8' ],
+	versions = [ '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '4.0', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8', '4.9', '5.0' ],
 	rp = require('request-promise'),
 	Promise = require("bluebird"),
 	AsciiTable = require('ascii-table')
 	fs = require('fs');
+
+const releaseDay = ( process.argv[2] == 'day' );
+
+console.log( releaseDay );
 
 var requests = versions.map( v => rp( 'http://api.wordpress.org/core/credits/1.1/?version=' + v ) );
 function overlap ( v1, v2 ) {
@@ -27,7 +31,13 @@ Promise.all( requests ).then( function( responses ){
 				}
 			});
 		 	props[ version ] = _.uniq( props[ version ] );
+			if ( releaseDay ) {
+				const shortName = version.replace( '.', '');
+				props[version] = require( './releaseday/' + shortName + '.json' );
+				
+			}
 		});
+
 		resolve( props );
 	});
 }).then( function( props ){
