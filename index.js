@@ -1,5 +1,5 @@
 var	_ = require( 'underscore' ),
-	versions = [ '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '4.0', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8', '4.9', '5.0' ],
+	versions = [ '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '4.0', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8', '4.9', '5.0', '5.1' ],
 	rp = require('request-promise'),
 	Promise = require("bluebird"),
 	AsciiTable = require('ascii-table')
@@ -20,12 +20,12 @@ Promise.all( requests ).then( function( responses ){
 		var props = [];
 		responses.forEach( r => {
 			var data = JSON.parse( r );
-			var groups = Object.keys( data.groups ); 
+			var groups = Object.keys( data.groups );
 			var version = data.data.version;
 			props[ version ] = [];
 			groups.forEach( g => {
 				if ( g !== 'libraries' ) {
-				props[ version ] = props[ version ].concat( 
+				props[ version ] = props[ version ].concat(
 					Object.keys( data.groups[g].data ).map( s => s.toLowerCase() )
 				);
 				}
@@ -34,7 +34,7 @@ Promise.all( requests ).then( function( responses ){
 			if ( releaseDay ) {
 				const shortName = version.replace( '.', '');
 				props[version] = require( './releaseday/' + shortName + '.json' );
-				
+
 			}
 		});
 
@@ -78,7 +78,7 @@ Promise.all( requests ).then( function( responses ){
 		resolve( [ newbs, props, unions, frequency, forward ] );
 	});
 }).then( function( r ){
-	var newbs = r[0], 
+	var newbs = r[0],
 		props = r[1],
 		unions = r[2],
 		frequency = r[3],
@@ -94,12 +94,12 @@ Promise.all( requests ).then( function( responses ){
 		versions.forEach( v => {
 			var overlaps = [v];
 			versions.forEach( v2 => {
-				overlaps.push( overlap( props[v], props[v2] ) );	
+				overlaps.push( overlap( props[v], props[v2] ) );
 			});
 			overlapTable.addRow( overlaps );
-			table.addRow( v , props[v].length, newbs[v].length, 
+			table.addRow( v , props[v].length, newbs[v].length,
 				parseInt( 100 * ( newbs[v].length /  props[v].length ))  + '%' );
-			forwardTable.addRow( v, props[v].length, overlap( props[v], forward[v] ) ); 
+			forwardTable.addRow( v, props[v].length, overlap( props[v], forward[v] ) );
 		});
 		_.each( frequency, ( versions, person ) => {
 			if ( typeof( howFrequent[ versions.length ] ) === 'undefined' ){
@@ -118,4 +118,3 @@ Promise.all( requests ).then( function( responses ){
 	console.log(frequencyTable.toString());
 	console.log(forwardTable.toString());
 });;
-
