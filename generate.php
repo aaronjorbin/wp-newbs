@@ -22,6 +22,6 @@ $class = 'WP_' . $argv[1] . '_Credits';
 
 $credits = new $class();
 
-$new_file = '../releaseday/' . $argv[1] . '.json';
+$new_file = './releaseday/' . $argv[1] . '.json';
 $data = json_encode( array_values( $credits->build() ) );
 file_put_contents( $new_file, $data );
